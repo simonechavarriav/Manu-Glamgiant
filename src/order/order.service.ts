@@ -37,8 +37,15 @@ async createOrder(dto: CreateOrderDto): Promise<Order> {
     return this.orderRepository.save(order);
 }
 
-async getOrders(): Promise<Order[]> {
+async findAll(): Promise<Order[]> {
     return this.orderRepository.find({ relations: ['client', 'products'] });
+}
+async findOne(id: string): Promise<Order> {
+    const product = await this.orderRepository.findOne({ where: { id } });
+    if (!product) {
+        throw new NotFoundException(`Order with ID ${id} not found`);
+    }
+    return product;
 }
 
 async updateOrder(id: string, dto: UpdateOrderDto): Promise<Order> {

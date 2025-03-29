@@ -2,8 +2,9 @@ import { Controller, Post, Get, Patch, Delete, Param, Body } from '@nestjs/commo
 import { OrderService } from './order.service';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { UpdateOrderDto } from './dto/update-order.dto';
+import { Order } from './entities/order.entity';
 
-@Controller('orders')
+@Controller('order')
 export class OrderController {
     constructor(private readonly orderService: OrderService) {}
 
@@ -14,7 +15,12 @@ export class OrderController {
 
     @Get()
     findAll() {
-        return this.orderService.getOrders();
+        return this.orderService.findAll();
+    }
+
+    @Get(':id')
+    async findOne(@Param('id') id: string): Promise<Order> {
+        return this.orderService.findOne(id);
     }
 
     @Patch(':id')
